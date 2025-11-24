@@ -17,6 +17,7 @@ jobs:
             FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
             FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
             EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
+            EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
         steps:
             # -----------------------------
