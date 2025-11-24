@@ -1,0 +1,36 @@
+require 'dotenv/load'  # loads .env if you use it
+
+default_platform(:expo)
+
+platform :expo do
+  desc "Build Android and upload to Firebase"
+  lane :firebase_android do
+    sh("eas build --platform android --profile preview --non-interactive")
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_ANDROID_APP_ID"],
+      groups: "testers",
+      release_notes: "Expo CI Android Beta"
+    )
+  end
+
+  desc "Build iOS and upload to Firebase"
+  lane :firebase_ios do
+    sh("eas build --platform ios --profile preview --non-interactive")
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_IOS_APP_ID"],
+      groups: "testers",
+      release_notes: "Expo CI iOS Beta"
+    )
+  end
+
+  # placeholders for future App Store / Play Store release
+  lane :release_ios do
+    UI.message("App Store release placeholder. Add Apple credentials later.")
+  end
+
+  lane :release_android do
+    UI.message("Play Store release placeholder. Add Google credentials later.")
+  end
+end
