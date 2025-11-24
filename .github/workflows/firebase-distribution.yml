@@ -46,9 +46,9 @@ jobs:
             - name: Install EAS CLI
               run: npm install -g eas-cli
 
-            # Authenticate EAS using token in secrets
-            - name: Configure EAS authentication
-              run: eas whoami || eas login --token $EAS_TOKEN
+            # Authentication is automatic with EAS_TOKEN
+            - name: Verify EAS authentication
+              run: eas whoami
 
             # -----------------------------
             # SETUP FASTLANE
