@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+.env
 
 # Expo
 .expo/
@@ -9,14 +10,21 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Builds
+*.apk
+*.pkg
+*.ipa
+build/
+
 # Native
-.kotlin/
 *.orig.*
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
+*.cer
+/.secure_files
 
 # Metro
 .metro-health-check*
@@ -38,6 +46,42 @@ yarn-error.*
 
 app-example
 
-# generated native folders
-/ios
-/android
+.npmrc
+
+# EAS
+.easignore
+eas.json.bak
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Android
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+android/gradle.properties
+android/app/release/
+
+# iOS
+ios/build/
+ios/Pods/
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcodeproj/xcuserdata/
+ios/*.xcodeproj/project.xcworkspace/
+ios/Podfile.lock
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
