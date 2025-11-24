@@ -63,7 +63,9 @@ jobs:
             # INSTALL FIREBASE CLI
             # -----------------------------
             - name: Install Firebase CLI
-              run: npm install -g firebase-tools
+              run: |
+                  npm install -g firebase-tools
+                  npx expo prebuild --platform android
 
             # -----------------------------
             # BUILD NATIVE ANDROID APK
