@@ -48,7 +48,9 @@ jobs:
 
             # Authentication is automatic with EAS_TOKEN
             - name: Verify EAS authentication
-              run: eas whoami
+              run: |
+                  export EAS_TOKEN=${{ secrets.EAS_TOKEN }}
+                  eas whoami
 
             # -----------------------------
             # SETUP FASTLANE
@@ -67,6 +69,7 @@ jobs:
             # -----------------------------
             - name: Build Android .apk/.aab with EAS
               run: |
+                  export EAS_TOKEN=${{ secrets.EAS_TOKEN }}
                   eas build --platform android --profile preview --non-interactive
               env:
                   EXPO_TOKEN: ${{ secrets.EAS_TOKEN }}
@@ -93,7 +96,8 @@ jobs:
             - name: Build iOS IPA with EAS
               if: runner.os == 'macOS' # fallback for mac self-host or future mac runners
               run: |
-                  eas build --platform ios --profile preview --non-interactive
+                  export EAS_TOKEN=${{ secrets.EAS_TOKEN }}
+                    eas build --platform ios --profile preview --non-interactive
 
             # -----------------------------
             # LOCATE THE BUILT IOS FILE
