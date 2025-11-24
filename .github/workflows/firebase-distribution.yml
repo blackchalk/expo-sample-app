@@ -66,22 +66,23 @@ jobs:
               run: npm install -g firebase-tools
 
             # -----------------------------
-            # ANDROID BUILD WITH EAS
+            # BUILD NATIVE ANDROID APK
             # -----------------------------
-            - name: Build Android .apk/.aab with EAS
-              run: |
-                  export EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}
-                  eas build --platform android --profile preview --non-interactive
-              env:
-                  EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+            - name: Cache Gradle
+              uses: actions/cache@v3
+              with:
+                  path: |
+                      ~/.gradle/caches
+                      ~/.gradle/wrapper/
+                  key: gradle-${{ hashFiles('android/build.gradle') }}
 
-            # -----------------------------
-            # LOCATE THE BUILT ANDROID FILE
-            # -----------------------------
-            - name: Locate Android build output
-              id: android_path
+            - name: Build Android APK
               run: |
-                  echo "ANDROID_FILE=$(ls dist/*.apk dist/*.aab 2>/dev/null | head -n 1)" >> $GITHUB_ENV
+                  cd android
+                  ./gradlew assembleRelease
+
+            - name: Set Android artifact path
+              run: echo "ANDROID_FILE=android/app/build/outputs/apk/release/app-release.apk" >> $GITHUB_ENV
 
             # -----------------------------
             # DISTRIBUTE ANDROID VIA FASTLANE
@@ -90,6 +91,8 @@ jobs:
               run: fastlane firebase_android
               env:
                   ANDROID_FILE_PATH: ${{ env.ANDROID_FILE }}
+                  FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+                  FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
             # -----------------------------
             # BUILD IOS (ONLY IF USING EXPO MANAGED)
