@@ -94,29 +94,29 @@ jobs:
                   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-            # -----------------------------
-            # BUILD IOS (ONLY IF USING EXPO MANAGED)
-            # -----------------------------
-            - name: Build iOS IPA with EAS
-              if: runner.os == 'macOS' # fallback for mac self-host or future mac runners
-              run: |
-                  export EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}
-                    eas build --platform ios --profile preview --non-interactive
+            # # -----------------------------
+            # # BUILD IOS (ONLY IF USING EXPO MANAGED)
+            # # -----------------------------
+            # - name: Build iOS IPA with EAS
+            #   if: runner.os == 'macOS' # fallback for mac self-host or future mac runners
+            #   run: |
+            #       export EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}
+            #         eas build --platform ios --profile preview --non-interactive
 
-            # -----------------------------
-            # LOCATE THE BUILT IOS FILE
-            # -----------------------------
-            - name: Locate iOS build output
-              if: runner.os == 'macOS'
-              id: ios_path
-              run: |
-                  echo "IOS_FILE=$(ls dist/*.ipa 2>/dev/null | head -n 1)" >> $GITHUB_ENV
+            # # -----------------------------
+            # # LOCATE THE BUILT IOS FILE
+            # # -----------------------------
+            # - name: Locate iOS build output
+            #   if: runner.os == 'macOS'
+            #   id: ios_path
+            #   run: |
+            #       echo "IOS_FILE=$(ls dist/*.ipa 2>/dev/null | head -n 1)" >> $GITHUB_ENV
 
-            # -----------------------------
-            # DISTRIBUTE IOS VIA FASTLANE
-            # -----------------------------
-            - name: Firebase iOS Distribution
-              if: runner.os == 'macOS'
-              run: fastlane firebase_ios
-              env:
-                  IOS_FILE_PATH: ${{ env.IOS_FILE }}
+            # # -----------------------------
+            # # DISTRIBUTE IOS VIA FASTLANE
+            # # -----------------------------
+            # - name: Firebase iOS Distribution
+            #   if: runner.os == 'macOS'
+            #   run: fastlane firebase_ios
+            #   env:
+            #       IOS_FILE_PATH: ${{ env.IOS_FILE }}
