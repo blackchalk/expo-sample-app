@@ -12,37 +12,103 @@ jobs:
         runs-on: ubuntu-latest
 
         env:
-            # Passed to Fastlane as ENV["..."] variables
+            # Passed to Fastlane as ENV["..."]
             FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
             FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
             FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
             EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
 
         steps:
+            # -----------------------------
+            # CHECKOUT
+            # -----------------------------
             - name: Checkout repository
               uses: actions/checkout@v4
 
+            # -----------------------------
+            # SET UP NODE
+            # -----------------------------
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
                   node-version: 20
+                  cache: "npm" # <-- Automatic caching for faster builds
 
+            # -----------------------------
+            # INSTALL DEPENDENCIES
+            # -----------------------------
             - name: Install dependencies
-              run: npm install
+              run: npm ci # faster + more reliable for CI
 
-            - name: Install Firebase CLI
-              run: npm install -g firebase-tools
+            # -----------------------------
+            # SET UP EAS CLI
+            # -----------------------------
+            - name: Install EAS CLI
+              run: npm install -g eas-cli
 
+            # Authenticate EAS using token in secrets
+            - name: Configure EAS authentication
+              run: eas whoami || eas login --token $EAS_TOKEN
+
+            # -----------------------------
+            # SETUP FASTLANE
+            # -----------------------------
             - name: Install Fastlane
               run: sudo gem install fastlane -NV
 
-            - name: Configure EAS authentication
+            # -----------------------------
+            # INSTALL FIREBASE CLI
+            # -----------------------------
+            - name: Install Firebase CLI
+              run: npm install -g firebase-tools
+
+            # -----------------------------
+            # ANDROID BUILD WITH EAS
+            # -----------------------------
+            - name: Build Android .apk/.aab with EAS
               run: |
-                  mkdir -p ~/.config/eas
-                  echo "{\"token\": \"${EAS_TOKEN}\"}" > ~/.config/eas/session.json
+                  eas build --platform android --profile preview --non-interactive
+              env:
+                  EXPO_TOKEN: ${{ secrets.EAS_TOKEN }}
 
-            - name: Run Android Firebase Distribution
+            # -----------------------------
+            # LOCATE THE BUILT ANDROID FILE
+            # -----------------------------
+            - name: Locate Android build output
+              id: android_path
+              run: |
+                  echo "ANDROID_FILE=$(ls dist/*.apk dist/*.aab 2>/dev/null | head -n 1)" >> $GITHUB_ENV
+
+            # -----------------------------
+            # DISTRIBUTE ANDROID VIA FASTLANE
+            # -----------------------------
+            - name: Firebase Android Distribution
               run: fastlane firebase_android
+              env:
+                  ANDROID_FILE_PATH: ${{ env.ANDROID_FILE }}
 
-            - name: Run iOS Firebase Distribution
+            # -----------------------------
+            # BUILD IOS (ONLY IF USING EXPO MANAGED)
+            # -----------------------------
+            - name: Build iOS IPA with EAS
+              if: runner.os == 'macOS' # fallback for mac self-host or future mac runners
+              run: |
+                  eas build --platform ios --profile preview --non-interactive
+
+            # -----------------------------
+            # LOCATE THE BUILT IOS FILE
+            # -----------------------------
+            - name: Locate iOS build output
+              if: runner.os == 'macOS'
+              id: ios_path
+              run: |
+                  echo "IOS_FILE=$(ls dist/*.ipa 2>/dev/null | head -n 1)" >> $GITHUB_ENV
+
+            # -----------------------------
+            # DISTRIBUTE IOS VIA FASTLANE
+            # -----------------------------
+            - name: Firebase iOS Distribution
+              if: runner.os == 'macOS'
               run: fastlane firebase_ios
+              env:
+                  IOS_FILE_PATH: ${{ env.IOS_FILE }}
