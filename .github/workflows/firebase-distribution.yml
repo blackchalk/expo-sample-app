@@ -98,7 +98,7 @@ jobs:
                   ./gradlew assembleRelease
 
             - name: Set Android artifact path
-              run: echo "ANDROID_FILE=android/app/build/outputs/apk/release/app-release.apk" >> $GITHUB_ENV
+              run: echo "ANDROID_FILE_PATH=android/app/build/outputs/apk/release/app-release.apk" >> $GITHUB_ENV
 
             # -----------------------------
             # DISTRIBUTE ANDROID VIA FASTLANE
