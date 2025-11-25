@@ -102,8 +102,8 @@ android {
         applicationId 'com.anonymous.StickerSmash'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode = versionCodeValue
-        versionName = versionNameValue
+        versionCode versionCodeValue
+        versionName versionNameValue
         buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
     }
     signingConfigs {
