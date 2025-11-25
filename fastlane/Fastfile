@@ -6,15 +6,13 @@ platform :expo do
   desc "Build Android and upload to Firebase"
   lane :firebase_android do
 
-    apk_path = ENV["ANDROID_FILE_PATH"]
-
-    unless File.exist?(apk_path)
-      UI.user_error!("APK not found at path: #{apk_path}")
+    unless File.exist?(ENV["ANDROID_FILE_PATH"])
+      UI.user_error!("APK not found at path: #{ENV["ANDROID_FILE_PATH"]}")
     end
 
     firebase_app_distribution(
       app: ENV["FIREBASE_ANDROID_APP_ID"],
-      file: apk_path,
+      file: ENV["ANDROID_FILE_PATH"],
       groups: "testers",
       release_notes: "Expo CI Android Beta"
     )
