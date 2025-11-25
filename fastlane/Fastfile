@@ -1,13 +1,10 @@
 require 'dotenv/load'  # loads .env if you use it
 
-default_platform(:expo)
+default_platform(:android)
 
-platform :expo do
+platform :android do
   desc "Build Android and upload to Firebase"
   lane :firebase_android do
-
-    sh("pwd")
-    sh("ls -R .")
       
     apk = File.expand_path("../#{ENV["ANDROID_FILE_PATH"]}", __dir__)
     UI.message("Resolved APK absolute path: #{apk}")
@@ -18,9 +15,10 @@ platform :expo do
 
     firebase_app_distribution(
       app: ENV["FIREBASE_ANDROID_APP_ID"],
-      file: apk,
-      groups: "testers",
-      release_notes: "Expo CI Android Beta"
+      firebase_cli_token: ENV["FIREBASE_TOKEN"],
+      apk_path: apk,
+      groups: "internal-testers",
+      release_notes: "Automated build"
     )
   end
 
