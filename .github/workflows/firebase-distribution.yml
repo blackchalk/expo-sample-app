@@ -101,7 +101,12 @@ jobs:
               run: ls -R android/app/build/outputs
 
             - name: Set Android artifact path
-              run: echo "ANDROID_FILE_PATH=$(find android/app/build/outputs/apk -name '*release*.apk' | head -n 1)" >> $GITHUB_ENV
+              run: echo "ANDROID_FILE_PATH=$(find android/app/build/outputs/apk/release -name '*release*.apk' | head -n 1)" >> $GITHUB_ENV
+
+            - name: Debug env before Fastlane
+              run: echo "ANDROID_FILE_PATH=${ANDROID_FILE_PATH}"
+              env:
+                  ANDROID_FILE_PATH: ${{ env.ANDROID_FILE_PATH }}
 
             # -----------------------------
             # DISTRIBUTE ANDROID VIA FASTLANE
