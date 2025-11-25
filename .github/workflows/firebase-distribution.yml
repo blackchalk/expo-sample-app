@@ -39,17 +39,13 @@ jobs:
         run: npm ci
 
       # -----------------------------
-      # SET UP RUBY + BUNDLER
+      # SET UP RUBY + FASTLANE
       # -----------------------------
-      - name: Install Ruby/Bundler
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ruby-full build-essential
-          gem install bundler
-
-      - name: Install Fastlane + Plugins via Bundler
-        run: bundle install
-        working-directory: .
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
 
       # -----------------------------
       # INSTALL FIREBASE CLI
