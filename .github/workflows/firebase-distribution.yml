@@ -97,8 +97,11 @@ jobs:
                   cd android
                   ./gradlew assembleRelease
 
+            - name: Debug APK output
+              run: ls -R android/app/build/outputs
+
             - name: Set Android artifact path
-              run: echo "ANDROID_FILE_PATH=android/app/build/outputs/apk/release/app-release.apk" >> $GITHUB_ENV
+              run: echo "ANDROID_FILE_PATH=$(find android/app/build/outputs/apk -name '*release*.apk' | head -n 1)" >> $GITHUB_ENV
 
             # -----------------------------
             # DISTRIBUTE ANDROID VIA FASTLANE
@@ -106,9 +109,9 @@ jobs:
             - name: Firebase Android Distribution
               run: fastlane firebase_android
               env:
-                  ANDROID_FILE_PATH: ${{ env.ANDROID_FILE_PATH }}
                   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+                  ANDROID_FILE_PATH: ${{ env.ANDROID_FILE_PATH }}
 
             # # -----------------------------
             # # BUILD IOS (ONLY IF USING EXPO MANAGED)
