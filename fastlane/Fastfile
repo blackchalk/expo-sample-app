@@ -14,9 +14,9 @@ platform :expo do
 
     firebase_app_distribution(
       app: ENV["FIREBASE_ANDROID_APP_ID"],
+      file: apk_path,
       groups: "testers",
       release_notes: "Expo CI Android Beta"
-      apk_path: apk_path
     )
   end
 
