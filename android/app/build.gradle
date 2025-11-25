@@ -80,15 +80,16 @@ def enableMinifyInReleaseBuilds = (findProperty('android.enableMinifyInReleaseBu
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
-def versionPropsFile = file("../version.properties")
-def versionCodeValue = 1
-def versionNameValue = "1.0.0"
 
-if (versionPropsFile.exists()) {
+def versionPropsFiles = file("../version.properties")
+def VERSION_CODE = 1
+def VERSION_NAME = "1.0.0"
+
+if (versionPropsFiles.exists()) {
     def versionProps = new Properties()
-    versionProps.load(new FileInputStream(versionPropsFile))
-    versionCodeValue = versionProps['VERSION_CODE'].toInteger()
-    versionNameValue = versionProps['VERSION_NAME']
+    versionProps.load(new FileInputStream(versionPropsFiles))
+    VERSION_CODE = versionProps['VERSION_CODE'].toInteger()
+    VERSION_NAME = versionProps['VERSION_NAME']
 }
 
 android {
@@ -102,8 +103,8 @@ android {
         applicationId 'com.anonymous.StickerSmash'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode versionCodeValue
-        versionName versionNameValue
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
         buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
     }
     signingConfigs {
