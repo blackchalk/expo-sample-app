@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "442810350194",
+    "project_id": "expo-sampleapp",
+    "storage_bucket": "expo-sampleapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442810350194:android:d343be576aa8da5bae60eb",
+        "android_client_info": {
+          "package_name": "com.blackchalk.exposampleapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLr_GNmLwUquFr9IK0Hs9_QRYCJRVpFgM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
