@@ -41,11 +41,11 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            # -----------------------------
-            # SET UP EAS CLI
-            # -----------------------------
-            - name: Install EAS CLI
-              run: npm install -g eas-cli
+            # # -----------------------------
+            # # SET UP EAS CLI
+            # # -----------------------------
+            # - name: Install EAS CLI
+            #   run: npm install -g eas-cli
 
             # # Authentication is automatic with EAS_TOKEN
             # - name: Verify EAS authentication
@@ -106,7 +106,7 @@ jobs:
             - name: Firebase Android Distribution
               run: fastlane firebase_android
               env:
-                  ANDROID_FILE_PATH: ${{ env.ANDROID_FILE }}
+                  ANDROID_FILE_PATH: ${{ env.ANDROID_FILE_PATH }}
                   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
