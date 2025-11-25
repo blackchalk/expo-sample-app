@@ -16,8 +16,8 @@ jobs:
             FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
             FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
             FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-            EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
-            EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+            # EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
+            # EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
         steps:
             # -----------------------------
@@ -33,13 +33,13 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: 20
-                  cache: "npm" # <-- Automatic caching for faster builds
+                  cache: "npm"
 
             # -----------------------------
             # INSTALL DEPENDENCIES
             # -----------------------------
             - name: Install dependencies
-              run: npm ci # faster + more reliable for CI
+              run: npm ci
 
             # -----------------------------
             # SET UP EAS CLI
@@ -47,11 +47,11 @@ jobs:
             - name: Install EAS CLI
               run: npm install -g eas-cli
 
-            # Authentication is automatic with EAS_TOKEN
-            - name: Verify EAS authentication
-              run: |
-                  export EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}
-                  eas whoami
+            # # Authentication is automatic with EAS_TOKEN
+            # - name: Verify EAS authentication
+            #   run: |
+            #       export EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}
+            #       eas whoami
 
             # -----------------------------
             # SETUP FASTLANE
@@ -77,6 +77,21 @@ jobs:
                       ~/.gradle/wrapper/
                   key: gradle-${{ hashFiles('android/build.gradle') }}
 
+            # ----------------------------------------------------
+            # BUMP VERSION (app.json + versionCode)
+            # ----------------------------------------------------
+            - name: Bump version
+              run: npm run ci:bump
+
+            # ----------------------------------------------------
+            # REGENERATE NATIVE ANDROID (required for version bump)
+            # ----------------------------------------------------
+            - name: Expo prebuild (Android only)
+              run: npx expo prebuild --platform android --no-install
+
+            # ----------------------------------------------------
+            # BUILD RELEASE APK
+            # ----------------------------------------------------
             - name: Build Android APK
               run: |
                   cd android
