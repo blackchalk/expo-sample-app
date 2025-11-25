@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.StickerSmash"
+      "bundleIdentifier": "com.blackchalk.exposampleapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +21,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.StickerSmash"
+      "package": "com.blackchalk.exposampleapp"
     },
     "web": {
       "output": "static",
