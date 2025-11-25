@@ -6,6 +6,9 @@ platform :expo do
   desc "Build Android and upload to Firebase"
   lane :firebase_android do
 
+      sh("pwd")
+      sh("ls -R .")
+
     unless File.exist?(ENV["ANDROID_FILE_PATH"])
       UI.user_error!("APK not found at path: #{ENV["ANDROID_FILE_PATH"]}")
     end
